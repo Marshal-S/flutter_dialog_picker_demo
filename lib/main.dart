@@ -39,6 +39,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String value = '';
 
+  final ActionSheetUpdater updater = ActionSheetUpdater();
+
+  @override
+  void initState() {
+    super.initState();
+    getActionSheetData(); //用于测试 actionSheet加载网络数据情况
+  }
+
   void showAlert() {
     showCupertinoAlert(
       // context: context,
@@ -55,18 +63,43 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void showActionSheet() {
-    final actions = <ActionSheetItem>[
-      ActionSheetItem(text: "确定"),
-      ActionSheetItem(text: "特殊", isDestructive: true),
+  getActionSheetData() {
+    //有网络数据时建议使用该参数
+    updater.actions = <ActionSheetItem>[
+      // ActionSheetItem(text: "确定"),
+      // ActionSheetItem(text: "特殊", isDestructive: true),
       ActionSheetItem(text: "加载中...", isLoading: true),
     ];
+    Future.delayed(const Duration(seconds: 5), () {
+      setState(() {
+        value = '加载完了';
+      });
+      //如果要用到前面的actions，可以从updater中获取
+      // final actions = updater.actions;
+      //也可以先赋值后调用更新
+      updater.update(<ActionSheetItem>[
+        ActionSheetItem(text: "确定"),
+        ActionSheetItem(text: "特殊", isDestructive: true),
+        ActionSheetItem(text: "加载中...", isLoading: true),
+      ]);
+    });
+  }
+
+  void showActionSheet() {
+    //假设这是网络数据
+    final actions = <ActionSheetItem>[
+      // ActionSheetItem(text: "确定"),
+      // ActionSheetItem(text: "特殊", isDestructive: true),
+      ActionSheetItem(text: "加载中...", isLoading: true),
+    ];
+
+    // var updateState;
     showCupertinoActionSheet(
       // context: context,
       title: '演示',
       message: "请选择一个效果",
-      actions: actions,
-      // isDestructiveCancel: true,
+      // actions: actions,//使用了updater之后，该参数可以忽略
+      updater: updater,
     ).then((res) {
       print(res);
       setState(() {
@@ -246,7 +279,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  const Text("ios menu风格menu，比较简单，未封装"),
+                  const Text("ios menu风格menu，比较简单，未封装，实际仓库也不会有😂"),
                   const Padding(
                     padding: EdgeInsets.all(10),
                     child: SizedBox(
