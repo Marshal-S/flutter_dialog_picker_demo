@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dialog_picker_demo/dialogs/dialog_config.dart';
+import 'dialog_config.dart';
 
 //封装一个适合我们项目的，结果返回一个 future
 //颜色等受系统默认的值影响，这里面就不填写属性了，primaryColor 更新会影响到所有的默认效果
